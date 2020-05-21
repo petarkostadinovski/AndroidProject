@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.firebaseproject.R;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
@@ -47,6 +48,7 @@ public class KeyList extends ArrayAdapter<Key>{
 
         Key key = keyList.get(position);
 
+        Picasso.get().load(key.getImage_url()).into(imageViewKey);
         textViewOnStock.setText(key.getOn_stock() == 1 ? "Available" : "Not available");
         textViewKeyName.setText(key.getName());
         textViewKeyPrice.setText(key.getPrice() + " den.");

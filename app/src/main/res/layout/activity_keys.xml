@@ -6,39 +6,93 @@
     android:layout_height="match_parent"
     tools:context=".Activities.KeysActivity">
 
+    <ImageView
+        android:id="@+id/imageViewHomeFromKeys"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/home" />
+
     <TextView
         android:id="@+id/textViewKeys"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="39dp"
+        android:layout_height="23dp"
         android:layout_marginTop="4dp"
         android:text="Keys"
-        android:textSize="36sp"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.048"
+        app:layout_constraintHorizontal_bias="0.016"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
         android:id="@+id/listViewKeys"
-        android:layout_width="419dp"
-        android:layout_height="478dp"
-        android:layout_marginTop="29dp"
+        android:layout_width="396dp"
+        android:layout_height="490dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.555"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewKeys"
-        app:layout_constraintVertical_bias="0.751" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Spinner
         android:id="@+id/spinnerKeys"
-        android:layout_width="167dp"
-        android:layout_height="23dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginLeft="28dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="139dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="12dp"
         android:entries="@array/spinnerItemsKeys"
         app:layout_constraintStart_toEndOf="@+id/textViewKeys"
+        app:layout_constraintTop_toBottomOf="@+id/editTextSearchByName" />
+
+    <ImageView
+        android:id="@+id/imageViewBackFromKeys"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewHomeFromKeys"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/imageViewSearchKeys"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/back"
+        tools:srcCompat="@drawable/back" />
+
+    <EditText
+        android:id="@+id/editTextSearchByName"
+        android:layout_width="144dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:ems="10"
+        android:hint="Search "
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toEndOf="@+id/textViewKeys"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageViewSearchKeys"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@+id/editTextSearchByName"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/search" />
+
+    <TextView
+        android:id="@+id/textViewChooseCar"
+        android:layout_width="109dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="4dp"
+        android:text="Choose a car"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.141"
+        app:layout_constraintStart_toEndOf="@+id/spinnerKeys"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewBackFromKeys" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
