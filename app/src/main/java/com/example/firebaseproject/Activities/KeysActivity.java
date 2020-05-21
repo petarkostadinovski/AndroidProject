@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,6 +23,7 @@ import com.example.firebaseproject.Model.KeyList;
 import com.example.firebaseproject.R;
 import com.example.firebaseproject.Service.Implementation.KeyServiceImplementation;
 import com.example.firebaseproject.Service.KeyService;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,10 +43,9 @@ public class KeysActivity extends AppCompatActivity {
     List<Car> carList;
     List<Key> filteredByCar;
 
-    TextView textViewChooseCar;
-
     ImageView imageViewBackFromKeys;
     ImageView imageViewSearchKeys;
+    ImageView imageViewChooseCar;
 
     EditText editTextSearchByName;
 
@@ -62,6 +63,8 @@ public class KeysActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_keys);
 
+        BottomNavigationView bottomNav = findViewById(R.id.bottomNavigation);
+        bottomNav.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
         databaseKeys = FirebaseDatabase.getInstance().getReference("keys");
 
         listViewKeys = (ListView)findViewById(R.id.listViewKeys);
@@ -70,30 +73,43 @@ public class KeysActivity extends AppCompatActivity {
         filteredByCar = new ArrayList<>();
         filteredList = new ArrayList<>();
         spinnerKeys = (Spinner)findViewById(R.id.spinnerKeys);
-        imageViewBackFromKeys = (ImageView)findViewById(R.id.imageViewBackFromKeys);
         editTextSearchByName = (EditText)findViewById(R.id.editTextSearchByName);
         imageViewSearchKeys = (ImageView)findViewById(R.id.imageViewSearchKeys);
+        imageViewChooseCar = (ImageView)findViewById(R.id.imageViewChooseCar);
         spinnerCarBrand = (Spinner)findViewById(R.id.spinnerCarBrand);
         spinnerCarModel = (Spinner)findViewById(R.id.spinnerCarModel);
         spinnerCarYear = (Spinner)findViewById(R.id.spinnerCarYear);
-        textViewChooseCar = (TextView)findViewById(R.id.textViewChooseCar);
 
         keyServiceImpl = new KeyServiceImplementation();
 
     }
 
+    BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_profile){
+
+                Intent intent = new Intent(KeysActivity.this, ProfileActivity.class);
+                startActivity(intent);
+                return true;
+            }
+            if (itemId == R.id.nav_home){
+                Intent intent = new Intent(KeysActivity.this, MenuActivity.class);
+                startActivity(intent);
+                return true;
+            }
+            else
+                return false;
+        }
+    };
+
     @Override
     protected void onStart() {
         super.onStart();
 
-        imageViewBackFromKeys.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(KeysActivity.this, MenuActivity.class));
-            }
-        });
-
-        textViewChooseCar.setOnClickListener(new View.OnClickListener() {
+        imageViewChooseCar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(KeysActivity.this, CarsActivity.class));

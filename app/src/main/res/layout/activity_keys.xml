@@ -6,15 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".Activities.KeysActivity">
 
-    <ImageView
-        android:id="@+id/imageViewHomeFromKeys"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="4dp"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/design_default_color_background"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/home" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_navigation" />
 
     <TextView
         android:id="@+id/textViewKeys"
@@ -30,43 +31,31 @@
 
     <ListView
         android:id="@+id/listViewKeys"
-        android:layout_width="396dp"
-        android:layout_height="490dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="398dp"
+        android:layout_height="418dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.461"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerKeys"
+        app:layout_constraintVertical_bias="0.836" />
 
     <Spinner
         android:id="@+id/spinnerKeys"
-        android:layout_width="139dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="12dp"
+        android:layout_width="242dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="4dp"
         android:entries="@array/spinnerItemsKeys"
-        app:layout_constraintStart_toEndOf="@+id/textViewKeys"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextSearchByName" />
-
-    <ImageView
-        android:id="@+id/imageViewBackFromKeys"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="4dp"
-        app:layout_constraintEnd_toStartOf="@+id/imageViewHomeFromKeys"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/imageViewSearchKeys"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/back"
-        tools:srcCompat="@drawable/back" />
 
     <EditText
         android:id="@+id/editTextSearchByName"
-        android:layout_width="144dp"
-        android:layout_height="39dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
+        android:layout_width="221dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="12dp"
         android:ems="10"
         android:hint="Search "
         android:inputType="textPersonName"
@@ -75,24 +64,21 @@
 
     <ImageView
         android:id="@+id/imageViewSearchKeys"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/editTextSearchByName"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/search" />
 
-    <TextView
-        android:id="@+id/textViewChooseCar"
-        android:layout_width="109dp"
-        android:layout_height="27dp"
-        android:layout_marginTop="4dp"
-        android:text="Choose a car"
-        android:textSize="18sp"
+    <ImageView
+        android:id="@+id/imageViewChooseCar"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.141"
-        app:layout_constraintStart_toEndOf="@+id/spinnerKeys"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewBackFromKeys" />
+        app:layout_constraintTop_toBottomOf="@+id/imageViewSearchKeys"
+        app:srcCompat="@drawable/car" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
