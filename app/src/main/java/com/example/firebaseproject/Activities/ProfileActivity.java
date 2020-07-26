@@ -49,11 +49,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         if (v == buttonLogout){
             firebaseAuth.signOut();
             finish();
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, RegistrationActivity.class));
         }
 
         if (v == textViewMenu){
-            startActivity(new Intent(this, MenuActivity.class));
+            startActivity(new Intent(this, MainActivity.class));
         }
 
     }

@@ -2,127 +2,144 @@ package com.example.firebaseproject.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.view.ActionProvider;
+import android.view.ContextMenu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.firebaseproject.Fragments.HomeFragment;
+import com.example.firebaseproject.Fragments.KeyFragment;
+import com.example.firebaseproject.Fragments.ProfileFragment;
+import com.example.firebaseproject.Fragments.SelectCarFragment;
+import com.example.firebaseproject.Model.Key;
 import com.example.firebaseproject.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+import java.util.List;
+import java.util.stream.Collectors;
 
-    //defining view objects
-    private EditText editTextEmail;
-    private EditText editTextPassword;
-    private Button buttonSignup;
-    private ProgressDialog progressDialog;
+public class MainActivity extends AppCompatActivity implements HomeFragment.OnHomeFragmentInteraction, KeyFragment.OnKeyFragmentInteraction, SelectCarFragment.CarFragmentInteraction {
 
-    private TextView textViewSignIn;
-
-    //defining firebaseauth object
-    private FirebaseAuth firebaseAuth;
-
-    @Override
-    public void onBackPressed() {
-        Toast.makeText(MainActivity.this,"Please login", Toast.LENGTH_SHORT).show();
-    }
+    private ProfileFragment profileFragment;
+    private HomeFragment homeFragment;
+    private KeyFragment keyFragment;
+    private SelectCarFragment selectCarFragment;
+    private FrameLayout selectCarFragment_container;
+    private FrameLayout fragment_container;
+    private int id;
+    private boolean homeClicked;
+    private boolean profileClicked;
+    private List<Fragment> fragments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_menu);
 
-        //initializing firebase auth object
-        firebaseAuth = FirebaseAuth.getInstance();
-
-        if (firebaseAuth.getCurrentUser() != null){
-            //start profile activity here
-            finish();
-            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-        }
-
-        //initializing views
-        editTextEmail = (EditText) findViewById(R.id.emailEditText);
-        editTextPassword = (EditText) findViewById(R.id.passwordEditText);
-
-        buttonSignup = (Button) findViewById(R.id.registerButton);
-        textViewSignIn = (TextView) findViewById(R.id.signInTextView);
-        progressDialog = new ProgressDialog(this);
-
-        //attaching listener to button
-        buttonSignup.setOnClickListener(this);
-        textViewSignIn.setOnClickListener(this);
-    }
-
-    private void registerUser(){
-
-        //getting email and password from edit texts
-        String email = editTextEmail.getText().toString().trim();
-        final String password  = editTextPassword.getText().toString().trim();
-
-        //checking if email and passwords are empty
-        if(TextUtils.isEmpty(email)){
-            Toast.makeText(this,"Please enter email",Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(TextUtils.isEmpty(password)){
-            Toast.makeText(this,"Please enter password",Toast.LENGTH_LONG).show();
-            return;
-        }
-
-
-        //if the email and password are not empty
-        //displaying a progress dialog
-
-        progressDialog.setMessage("Registering Please Wait...");
-        progressDialog.show();
-
-        //creating a new user
-        firebaseAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        //checking if success
-                        if(task.isSuccessful()){
-                            finish();
-                            //Toast.makeText(MainActivity.this,"Successfully registered",Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
-                        }
-                        else if (password.length() <= 5){
-                            Toast.makeText(MainActivity.this,"Password length should be more that 5 characters", Toast.LENGTH_LONG).show();
-                        }
-                        else{
-                            //display some message here
-                            Toast.makeText(MainActivity.this,"Registration Error",Toast.LENGTH_LONG).show();
-                        }
-                        progressDialog.dismiss();
-                    }
-                });
+        profileFragment = new ProfileFragment();
+        homeFragment = new HomeFragment();
+        keyFragment = new KeyFragment();
+        selectCarFragment = new SelectCarFragment();
+        selectCarFragment_container = (FrameLayout)findViewById(R.id.selectCarFragment_container);
+        fragment_container = (FrameLayout)findViewById(R.id.fragment_container);
+        homeClicked = false;
+        profileClicked = false;
+        BottomNavigationView bottomNav = findViewById(R.id.bottomNavigation);
+        bottomNav.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
 
     }
 
     @Override
-    public void onClick(View view) {
-        //calling register method on click
-        if(view == buttonSignup){
-            registerUser();
-        }
-        if (view == textViewSignIn){
-            startActivity(new Intent(this,LoginActivity.class));
-        }
+    protected void onStart() {
+        super.onStart();
+        homeClicked = true;
+        profileClicked = false;
+        homeFragment = new HomeFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.addToBackStack(null);
+        transaction.replace(fragment_container.getId(), homeFragment, "HOME_FRAGMENT").commit();
     }
 
+    BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            int itemId = item.getItemId();
+
+            if (itemId == R.id.nav_profile && !profileClicked){
+                profileClicked = true;
+                homeClicked = false;
+                profileFragment = new ProfileFragment();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.addToBackStack(null);
+                transaction.replace(fragment_container.getId(), profileFragment, "PROFILE_FRAGMENT").commit();
+                return true;
+            }
+            else if (itemId == R.id.nav_home && !homeClicked){
+                homeClicked = true;
+                profileClicked = false;
+                homeFragment = new HomeFragment();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.addToBackStack(null);
+                transaction.replace(fragment_container.getId(), homeFragment, "HOME_FRAGMENT").commit();
+                return true;
+            }
+            else
+                return false;
+        }
+    };
+
+    @Override
+    public void openHomeFragment() {
+        keyFragment = new KeyFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.addToBackStack(null);
+        transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_left);
+        transaction.replace(fragment_container.getId(), keyFragment, "KEY_FRAGMENT").commit();
+        homeClicked = false;
+    }
+
+    @Override
+    public void openCarFragment() {
+        selectCarFragment = new SelectCarFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.addToBackStack(null);
+        homeClicked = false;
+        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right);
+        transaction.replace(fragment_container.getId(), selectCarFragment, "SELECT_CAR_FRAGMENT").commit();
+    }
+
+    @Override
+    public void filteredData(String id) {
+        if (id != null) {
+            keyFragment = KeyFragment.keyFragmentInstance(Integer.parseInt(id));
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.addToBackStack(null);
+            transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_left);
+            transaction.replace(fragment_container.getId(), keyFragment, "KEY_FRAGMENT").commit();
+        }else {
+            keyFragment = new KeyFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.addToBackStack(null);
+            transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_left);
+            transaction.replace(fragment_container.getId(), keyFragment, "KEY_FRAGMENT").commit();
+        }
+    }
 }

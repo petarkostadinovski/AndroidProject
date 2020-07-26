@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if (task.isSuccessful()){
                     //start the profile activity
                     finish();
-                    startActivity(new Intent(getApplicationContext(), MenuActivity.class));
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 }else{
                     Toast.makeText(LoginActivity.this,"Wrong email or password, please try again",Toast.LENGTH_SHORT).show();
                 }
@@ -97,7 +97,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
         if (v == textViewSignUp){
             finish();
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, RegistrationActivity.class));
         }
     }
 }

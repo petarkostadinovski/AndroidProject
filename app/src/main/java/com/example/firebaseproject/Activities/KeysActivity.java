@@ -2,27 +2,27 @@ package com.example.firebaseproject.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.firebaseproject.Fragments.KeyFragment;
+import com.example.firebaseproject.Fragments.SelectCarFragment;
 import com.example.firebaseproject.Model.Car;
 import com.example.firebaseproject.Model.Key;
-import com.example.firebaseproject.Model.KeyList;
 import com.example.firebaseproject.R;
 import com.example.firebaseproject.Service.Implementation.KeyServiceImplementation;
-import com.example.firebaseproject.Service.KeyService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,12 +30,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class KeysActivity extends AppCompatActivity {
+public class KeysActivity extends AppCompatActivity implements SelectCarFragment.CarFragmentInteraction {
 
     ListView listViewKeys;
     List<Key> keyList;
@@ -43,11 +42,20 @@ public class KeysActivity extends AppCompatActivity {
     List<Car> carList;
     List<Key> filteredByCar;
 
-    ImageView imageViewBackFromKeys;
     ImageView imageViewSearchKeys;
-    ImageView imageViewChooseCar;
+    public ImageView imageViewChooseCar;
+
+    TextView textViewKeys;
+
+    KeyFragment keyFragment;
+    SelectCarFragment selectCarFragment;
+
+    String searchedValue;
 
     EditText editTextSearchByName;
+
+    FrameLayout container_keyFragment;
+    FrameLayout container_carFragment;
 
     Spinner spinnerKeys;
     Spinner spinnerCarBrand;
@@ -79,9 +87,35 @@ public class KeysActivity extends AppCompatActivity {
         spinnerCarBrand = (Spinner)findViewById(R.id.spinnerCarBrand);
         spinnerCarModel = (Spinner)findViewById(R.id.spinnerCarModel);
         spinnerCarYear = (Spinner)findViewById(R.id.spinnerCarYear);
-
+        container_keyFragment = (FrameLayout) findViewById(R.id.container_keyFragment);
+        container_carFragment = (FrameLayout) findViewById(R.id.container_carFragment);
+        textViewKeys = (TextView) findViewById(R.id.textViewKeys);
+        searchedValue = String.valueOf(editTextSearchByName.getText());
         keyServiceImpl = new KeyServiceImplementation();
+        openKeyFragment(keyList);
 
+    }
+
+    public void openKeyFragment(List<Key> list){
+        keyFragment = KeyFragment.keyFragmentInstance(list);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        if (selectCarFragment != null && selectCarFragment.isAdded())
+            transaction.hide(selectCarFragment);
+        imageViewChooseCar.setEnabled(true);
+        //transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_left);
+        transaction.addToBackStack(null);
+        transaction.add(container_keyFragment.getId(), keyFragment, "KEY_FRAGMENT").commit();
+    }
+
+    public void openCarFragment(){
+        selectCarFragment = new SelectCarFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right);
+        transaction.addToBackStack(null);
+        transaction.detach(keyFragment);
+        transaction.add(container_carFragment.getId(), selectCarFragment, "CAR_FRAGMENT").commit();
     }
 
     BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -90,14 +124,15 @@ public class KeysActivity extends AppCompatActivity {
 
             int itemId = item.getItemId();
             if (itemId == R.id.nav_profile){
-
-                Intent intent = new Intent(KeysActivity.this, ProfileActivity.class);
+                Intent intent = new Intent(KeysActivity.this, MainActivity.class);
                 startActivity(intent);
+                intent.putExtra("id", itemId);
                 return true;
             }
-            if (itemId == R.id.nav_home){
-                Intent intent = new Intent(KeysActivity.this, MenuActivity.class);
+            else if (itemId == R.id.nav_home){
+                Intent intent = new Intent(KeysActivity.this, MainActivity.class);
                 startActivity(intent);
+                intent.putExtra("id", itemId);
                 return true;
             }
             else
@@ -108,11 +143,11 @@ public class KeysActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
         imageViewChooseCar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(KeysActivity.this, CarsActivity.class));
+                imageViewChooseCar.setEnabled(false);
+                openCarFragment();
             }
         });
 
@@ -132,40 +167,29 @@ public class KeysActivity extends AppCompatActivity {
                 imageViewSearchKeys.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-                        String searchedValue = String.valueOf(editTextSearchByName.getText());
-
-                        List<Key> searchedList = keyList.stream()
+                        searchedValue = String.valueOf(editTextSearchByName.getText());
+                        filteredList = keyList.stream()
                                 .filter(key -> key.getName().toLowerCase().contains(searchedValue.toLowerCase()))
                                 .collect(Collectors.toList());
 
                         spinnerKeys.setSelection(0);
-
-                        KeyList adapter = new KeyList(KeysActivity.this, searchedList);
-                        listViewKeys.setAdapter(adapter);
+                        openKeyFragment(filteredList);
                     }
                 });
 
                 spinnerKeys.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                        if (position != 0)
-                            editTextSearchByName.setText("");
-
                         if (position == 1)
-                            filteredList = keyServiceImpl.filterKeyByNameAsc(keyList);
+                            openKeyFragment(keyServiceImpl.filterKeyByNameAsc(keyList));
                         else if (position == 2)
-                            filteredList = keyServiceImpl.filterKeyByNameDesc(keyList);
+                            openKeyFragment(keyServiceImpl.filterKeyByNameDesc(keyList));
                         else if (position == 3)
-                            filteredList = keyServiceImpl.filterAvailableKeys(keyList);
+                            openKeyFragment(keyServiceImpl.filterAvailableKeys(keyList));
                         else if (position == 4)
-                            filteredList = keyServiceImpl.filterNotAvailableKeys(keyList);
+                            openKeyFragment(keyServiceImpl.filterNotAvailableKeys(keyList));
                         else
-                            filteredList = keyList;
-
-                        KeyList adapter = new KeyList(KeysActivity.this, filteredList);
-                        listViewKeys.setAdapter(adapter);
+                            editTextSearchByName.setText("");
 
                     }
 
@@ -174,22 +198,6 @@ public class KeysActivity extends AppCompatActivity {
 
                     }
                 });
-
-                if (getIntent().getStringExtra("id") != null) {
-
-                    int carId = Integer.parseInt(getIntent().getStringExtra("id"));
-
-                    filteredByCar = keyList.stream()
-                            .filter(key -> key.getCar_id() == carId)
-                            .collect(Collectors.toList());
-
-                    KeyList adapter = new KeyList(KeysActivity.this, filteredByCar);
-                    listViewKeys.setAdapter(adapter);
-
-                }else {
-                    KeyList adapter = new KeyList(KeysActivity.this, keyList);
-                    listViewKeys.setAdapter(adapter);
-                }
             }
 
             @Override
@@ -198,4 +206,21 @@ public class KeysActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void filteredData(String id) {
+
+        if (id != null) {
+            int carId = Integer.parseInt(id);
+            filteredList = keyList.stream()
+                    .filter(key -> key.getCar_id() == carId)
+                    .collect(Collectors.toList());
+
+            openKeyFragment(filteredList);
+
+            imageViewChooseCar.setEnabled(true);
+        }
+
+    }
+
 }

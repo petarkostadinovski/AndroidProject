@@ -12,16 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activities.CarsActivity"></activity>
-        <activity android:name=".Activities.KeysActivity" />
-        <activity android:name=".Activities.MenuActivity" />
-        <activity android:name=".Activities.ProfileActivity" />
-        <activity android:name=".Activities.LoginActivity" />
+        <activity android:name=".Activities.KeysActivity" android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".Activities.ProfileActivity" />
+        <activity android:name=".Activities.LoginActivity" />
+        <activity android:name=".Activities.RegistrationActivity">
+
         </activity>
     </application>
 
