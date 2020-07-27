@@ -13,8 +13,25 @@
         <item>Filter keys</item>
         <item>Sort by name (asc)</item>
         <item>Sort by name (desc)</item>
-        <item>Available keys</item>
-        <item>Not available keys</item>
+        <item>Available</item>
+        <item>Not available</item>
+    </string-array>
+
+    <string-array name="spinnerRateProduct">
+        <item>Rate this product</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string-array name="spinnerItemsAccessories">
+        <item>Filter accessories</item>
+        <item>Sort by name (asc)</item>
+        <item>Sort by name (desc)</item>
+        <item>Available</item>
+        <item>Not available</item>
     </string-array>
 
     <string-array name="spinnerCarBrand">

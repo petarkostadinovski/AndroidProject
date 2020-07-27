@@ -77,35 +77,34 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_profile2, container, false);
-
         firebaseAuth = firebaseAuth.getInstance();
-
-        if (firebaseAuth.getCurrentUser() == null){
-            startActivity(new Intent(getActivity(), LoginActivity.class));
-        }
-
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
-        textViewUserEmail = view.findViewById(R.id.textViewUserEmail);
-        textViewUserEmail.setText(user.getEmail());
-        textViewMenu = view.findViewById(R.id.textViewMenu);
-        buttonLogout = view.findViewById(R.id.buttonLogout);
+        if (user == null) {
+            startActivity(new Intent(getContext(), RegistrationActivity.class));
+            return null;
+        }else{
+            textViewUserEmail = view.findViewById(R.id.textViewUserEmail);
+            textViewUserEmail.setText(user.getEmail());
+            textViewMenu = view.findViewById(R.id.textViewMenu);
+            buttonLogout = view.findViewById(R.id.buttonLogout);
 
-        buttonLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                firebaseAuth.signOut();
-                startActivity(new Intent(getActivity(), RegistrationActivity.class));
-            }
-        });
+            buttonLogout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    firebaseAuth.signOut();
+                    startActivity(new Intent(getActivity(), RegistrationActivity.class));
+                }
+            });
 
-        textViewMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), MainActivity.class));
-            }
-        });
-        return view;
+            textViewMenu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getActivity(), MainActivity.class));
+                }
+            });
+            return view;
+        }
     }
 
 

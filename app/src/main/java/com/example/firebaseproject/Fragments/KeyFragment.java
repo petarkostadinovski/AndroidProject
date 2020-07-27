@@ -45,6 +45,7 @@ public class KeyFragment extends Fragment {
     private static final String CAR_ID = "car_id";
 
     KeyList adapter;
+
     // TODO: Rename and change types of parameters
     private List<Key> keyListArgument;
     private int carIdArgument;
@@ -142,6 +143,14 @@ public class KeyFragment extends Fragment {
         searchedValue = String.valueOf(editTextSearchByName.getText());
         keyServiceImpl = new KeyServiceImplementation();
         progressBar = view.findViewById(R.id.progressBar1);
+
+        listViewKeys.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Key key = (Key) listViewKeys.getItemAtPosition(position);
+                itemClick(key);
+            }
+        });
 
         return view;
     }
@@ -268,10 +277,16 @@ public class KeyFragment extends Fragment {
 
     public interface OnKeyFragmentInteraction{
         void openCarFragment();
+        void itemClick(Key key);
     }
     public void openCarFragment(){
         if (onKeyFragmentInteraction != null)
             onKeyFragmentInteraction.openCarFragment();
+    }
+    public void itemClick(Key key){
+        if (onKeyFragmentInteraction != null){
+            onKeyFragmentInteraction.itemClick(key);
+        }
     }
 
 }

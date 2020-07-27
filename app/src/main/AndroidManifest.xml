@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".Activities.CarsActivity"></activity>
         <activity android:name=".Activities.KeysActivity" android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".Activities.MainActivity">
+        <activity android:name=".Activities.MainActivity" android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

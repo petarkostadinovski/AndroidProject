@@ -10,22 +10,46 @@
         android:id="@+id/imageViewKeys"
         android:layout_width="192dp"
         android:layout_height="165dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="116dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewKeys"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/keys" />
+
+    <ImageView
+        android:id="@+id/imageViewAccessories"
+        android:layout_width="192dp"
+        android:layout_height="165dp"
+        android:layout_marginBottom="204dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewKeys"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/img_accessories" />
 
     <TextView
         android:id="@+id/textViewKeys"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="180dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="100dp"
         android:text="Keys"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewAccessories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="13dp"
+        android:text="Accessories"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewKeys" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

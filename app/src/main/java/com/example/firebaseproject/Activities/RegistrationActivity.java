@@ -34,7 +34,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onBackPressed() {
-        Toast.makeText(RegistrationActivity.this,"Please login", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, MainActivity.class));
     }
 
     @Override
@@ -62,6 +62,9 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         //attaching listener to button
         buttonSignup.setOnClickListener(this);
         textViewSignIn.setOnClickListener(this);
+
+
+
     }
 
     private void registerUser(){

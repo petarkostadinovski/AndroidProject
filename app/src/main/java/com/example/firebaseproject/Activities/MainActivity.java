@@ -6,41 +6,52 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.app.AlertDialog;
 import android.os.Bundle;
-import android.view.ActionProvider;
-import android.view.ContextMenu;
 import android.view.MenuItem;
-import android.view.SubMenu;
-import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.TextView;
 
+import com.example.firebaseproject.Fragments.AccessoriesFragment;
 import com.example.firebaseproject.Fragments.HomeFragment;
+import com.example.firebaseproject.Fragments.ItemFragment;
 import com.example.firebaseproject.Fragments.KeyFragment;
 import com.example.firebaseproject.Fragments.ProfileFragment;
 import com.example.firebaseproject.Fragments.SelectCarFragment;
 import com.example.firebaseproject.Model.Key;
+import com.example.firebaseproject.Model.Keychain;
 import com.example.firebaseproject.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class MainActivity extends AppCompatActivity implements HomeFragment.OnHomeFragmentInteraction, KeyFragment.OnKeyFragmentInteraction, SelectCarFragment.CarFragmentInteraction {
+public class MainActivity extends AppCompatActivity implements HomeFragment.OnHomeFragmentInteraction, KeyFragment.OnKeyFragmentInteraction, SelectCarFragment.CarFragmentInteraction, AccessoriesFragment.OnAccessoriesFragmentInteraction {
 
     private ProfileFragment profileFragment;
     private HomeFragment homeFragment;
     private KeyFragment keyFragment;
     private SelectCarFragment selectCarFragment;
+    private ItemFragment itemFragment;
+
+    private AccessoriesFragment accessoriesFragment;
     private FrameLayout selectCarFragment_container;
     private FrameLayout fragment_container;
     private int id;
     private boolean homeClicked;
     private boolean profileClicked;
+
+    @Override
+    public void itemClick(Key key) {
+        itemFragment = ItemFragment.itemFragmentInstance(key.getName(), key.getDescription(), key.getImage_url(), key.getPrice(), key.getOn_stock());
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.addToBackStack(null);
+        transaction.replace(fragment_container.getId(), itemFragment, "ITEM_FRAGMENT").commit();
+    }
+
     private List<Fragment> fragments;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnHo
         homeFragment = new HomeFragment();
         keyFragment = new KeyFragment();
         selectCarFragment = new SelectCarFragment();
+        accessoriesFragment = new AccessoriesFragment();
+        itemFragment = new ItemFragment();
         selectCarFragment_container = (FrameLayout)findViewById(R.id.selectCarFragment_container);
         fragment_container = (FrameLayout)findViewById(R.id.fragment_container);
         homeClicked = false;
@@ -77,7 +90,12 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnHo
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             int itemId = item.getItemId();
 
+            firebaseAuth = firebaseAuth.getInstance();
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+
             if (itemId == R.id.nav_profile && !profileClicked){
+                AlertDialog.Builder builder = new AlertDialog.Builder(getBaseContext());
+
                 profileClicked = true;
                 homeClicked = false;
                 profileFragment = new ProfileFragment();
@@ -103,7 +121,17 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnHo
     };
 
     @Override
-    public void openHomeFragment() {
+    public void openAccessoriesFragment() {
+        accessoriesFragment = new AccessoriesFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.addToBackStack(null);
+        transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_left);
+        transaction.replace(fragment_container.getId(), accessoriesFragment, "ACCESSORIES_FRAGMENT").commit();
+    }
+
+    @Override
+    public void openKeyFragment() {
         keyFragment = new KeyFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -141,5 +169,14 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnHo
             transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_left);
             transaction.replace(fragment_container.getId(), keyFragment, "KEY_FRAGMENT").commit();
         }
+    }
+
+    @Override
+    public void itemClick(Keychain keychain) {
+        itemFragment = ItemFragment.itemFragmentInstance(keychain.getName(), keychain.getDescription(), keychain.getImage_url(), keychain.getPrice(), keychain.getOn_stock());
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.addToBackStack(null);
+        transaction.replace(fragment_container.getId(), itemFragment, "ITEM_FRAGMENT").commit();
     }
 }

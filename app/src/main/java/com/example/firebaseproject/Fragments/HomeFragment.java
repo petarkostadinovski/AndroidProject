@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.firebaseproject.Activities.KeysActivity;
 import com.example.firebaseproject.Activities.MainActivity;
@@ -24,6 +25,9 @@ import com.example.firebaseproject.R;
 public class HomeFragment extends Fragment {
 
     private ImageView imageViewKeys;
+    private ImageView imageViewAccessoies;
+    private TextView textViewKeys;
+    private TextView textViewAccessories;
     private OnHomeFragmentInteraction onHomeFragmentInteraction;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -72,11 +76,35 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         imageViewKeys = view.findViewById(R.id.imageViewKeys);
+        imageViewAccessoies = view.findViewById(R.id.imageViewAccessories);
+        textViewKeys = view.findViewById(R.id.textViewKeys);
+        textViewAccessories = view.findViewById(R.id.textViewAccessories);
 
         imageViewKeys.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openHomeFragment();
+                openKeyFragment();
+            }
+        });
+
+        imageViewAccessoies.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openAccessoriesFragment();;
+            }
+        });
+
+        textViewKeys.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openKeyFragment();;
+            }
+        });
+
+        textViewAccessories.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openAccessoriesFragment();
             }
         });
 
@@ -84,12 +112,18 @@ public class HomeFragment extends Fragment {
     }
 
     public interface OnHomeFragmentInteraction {
-        void openHomeFragment();
+        void openKeyFragment();
+        void openAccessoriesFragment();
     }
 
-    public void openHomeFragment(){
+    public void openKeyFragment(){
         if (onHomeFragmentInteraction != null){
-            onHomeFragmentInteraction.openHomeFragment();
+            onHomeFragmentInteraction.openKeyFragment();
+        }
+    }
+    public void openAccessoriesFragment(){
+        if (onHomeFragmentInteraction != null){
+            onHomeFragmentInteraction.openAccessoriesFragment();
         }
     }
 

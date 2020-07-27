@@ -1,7 +1,6 @@
 package com.example.firebaseproject.Model;
 
 import android.app.Activity;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +8,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,20 +16,25 @@ import androidx.annotation.Nullable;
 import com.example.firebaseproject.R;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
-public class KeyList extends ArrayAdapter<Key>{
+public class AccessoriesList extends ArrayAdapter<Keychain> {
 
     private Activity context;
-    private List<Key> keyList;
+    private List<Keychain> keychainList;
     private int lastPosition = -1;
 
-    public KeyList (Activity context, List<Key> keyList){
-        super(context,R.layout.layout_keys, keyList);
+    public AccessoriesList (Activity context, List<Keychain> keychainList){
+        super(context, R.layout.layout_keys, keychainList);
         this.context = context;
-        this.keyList = keyList;
+        this.keychainList = keychainList;
+    }
+
+    static class ViewHolder{
+        TextView textViewKeyName;
+        TextView textViewOnStock;
+        TextView textViewKeyPrice;
+        ImageView imageViewKey;
     }
 
     @NonNull
@@ -40,7 +42,7 @@ public class KeyList extends ArrayAdapter<Key>{
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         final View result;
-        AccessoriesList.ViewHolder holder = new AccessoriesList.ViewHolder();
+        ViewHolder holder = new ViewHolder();
 
         if (convertView == null){
             LayoutInflater inflater = context.getLayoutInflater();
@@ -56,7 +58,7 @@ public class KeyList extends ArrayAdapter<Key>{
 
             convertView.setTag(holder);
         }else {
-            holder = (AccessoriesList.ViewHolder) convertView.getTag();
+            holder = (ViewHolder) convertView.getTag();
             result = convertView;
         }
 
@@ -64,13 +66,17 @@ public class KeyList extends ArrayAdapter<Key>{
                 (position > lastPosition) ? R.anim.load_down_listview : R.anim.load_up_listview);
         result.startAnimation(animation);
         lastPosition = position;
-        Key key = keyList.get(position);
+        Keychain keychain = keychainList.get(position);
 
-        holder.textViewKeyName.setText(key.getName());
-        holder.textViewKeyPrice.setText(String.valueOf(key.getPrice()) + " ден.");
-        holder.textViewOnStock.setText(key.getOn_stock() == 1 ? "Available" : "Not available");
-        Picasso.get().load(key.getImage_url()).into(holder.imageViewKey);
+//        textViewOnStock.setText(keychain.getOn_stock() == 1 ? "Available" : "Not available");
+//        textViewKeyName.setText(keychain.getName());
+//        textViewKeyPrice.setText(keychain.getPrice() + " den.");
+        holder.textViewKeyName.setText(keychain.getName());
+        holder.textViewKeyPrice.setText(String.valueOf(keychain.getPrice()));
+        holder.textViewOnStock.setText(keychain.getOn_stock() == 1 ? "Available" : "Not available");
+        Picasso.get().load(keychain.getImage_url()).into(holder.imageViewKey);
 
         return convertView;
     }
+
 }
