@@ -10,31 +10,33 @@
         android:id="@+id/textViewUserEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="176dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="104dp"
+        android:layout_marginEnd="5dp"
         android:text="user email"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.953"
+        app:layout_constraintEnd_toStartOf="@+id/buttonLogout"
+        app:layout_constraintHorizontal_bias="0.858"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/buttonLogout"
-        android:layout_width="87dp"
-        android:layout_height="41dp"
-        android:text="Logout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.993"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewUserEmail" />
-
-    <TextView
-        android:id="@+id/textViewMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="156dp"
-        android:text="Menu"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="92dp"
+        android:layout_marginEnd="32dp"
+        android:text="Logout"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/listViewUsersProducts"
+        android:layout_width="403dp"
+        android:layout_height="423dp"
+        android:layout_marginTop="28dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonLogout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

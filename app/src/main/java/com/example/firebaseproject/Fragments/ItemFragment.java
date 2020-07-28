@@ -1,18 +1,38 @@
 package com.example.firebaseproject.Fragments;
 
 import android.graphics.Color;
+import android.media.Rating;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.firebaseproject.Model.Key;
+import com.example.firebaseproject.Model.ProductRating;
+import com.example.firebaseproject.Model.UserProduct;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import com.example.firebaseproject.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemFragment extends Fragment {
 
@@ -25,6 +45,7 @@ public class ItemFragment extends Fragment {
     private static final String ITEM_ONSTOCK = "onStock";
 
     private ImageView imageViewRateIcon;
+    private boolean added = false;
 
     // TODO: Rename and change types of parameters
 
@@ -39,8 +60,23 @@ public class ItemFragment extends Fragment {
     private TextView textViewItemDescription;
     private TextView textViewItemOnStock;
     private TextView textViewItemPrice;
+    private TextView textViewAverageRating;
+    private TextView textViewTotalRatings;
+    private Spinner spinnerRateProduct;
+    private Button btnAdd;
 
+    List<ProductRating> itemRatings;
 
+    private int rating = 0;
+    private double sumRatings = 0;
+    private int numRatings = 0;
+
+    private DatabaseReference databaseReference;
+    private DatabaseReference databaseUsers_id;
+    private DatabaseReference dataBaseRatings;
+    private DatabaseReference dataBaseUserProduct;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
 
     public ItemFragment() {
         // Required empty public constructor
@@ -83,11 +119,62 @@ public class ItemFragment extends Fragment {
         textViewItemName = view.findViewById(R.id.textViewItemName);
         textViewItemOnStock = view.findViewById(R.id.textViewOnStockItem);
         textViewItemPrice = view.findViewById(R.id.textViewItemPrice);
+        textViewAverageRating = view.findViewById(R.id.textViewAverageRating);
+        textViewTotalRatings = view.findViewById(R.id.textViewTotalRatings);
+        spinnerRateProduct = view.findViewById(R.id.spinnerRateProduct);
+        btnAdd = view.findViewById(R.id.btnAddItem);
+
+        itemRatings = new ArrayList<>();
+
+        firebaseAuth = firebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+
+        databaseUsers_id = FirebaseDatabase.getInstance().getReference("product_rating");
+        dataBaseUserProduct = FirebaseDatabase.getInstance().getReference("user_product");
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        imageViewRateIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (spinnerRateProduct.getSelectedItemPosition() != 0 && user != null){
+                    addRating();
+                }
+                else if (spinnerRateProduct.getSelectedItemPosition() == 0 && user != null){
+                    Toast.makeText(getContext(),"Please select value!",Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(getContext(),"Please log in!",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (user != null)
+                    addButtonClick();
+                else {
+                    Toast.makeText(getContext(),"Please log in!",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        spinnerRateProduct.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                rating = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
         if (getArguments() != null){
             textViewItemName.setText("Name: " + item_name);
             textViewItemDescription.setText(item_description);
-            textViewItemPrice.setText(String.valueOf(item_price) + " ден.");
+            textViewItemPrice.setText(item_price + " ден.");
             textViewItemOnStock.setText(item_onStock == 1 ? "On stock: Available" : "On stock: Not available");
             textViewItemOnStock.setTextColor(item_onStock == 1 ? Color.GREEN : Color.RED);
             Picasso.get().load(item_imgUrl).into(imageViewItem);
@@ -95,4 +182,81 @@ public class ItemFragment extends Fragment {
 
         return view;
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        databaseUsers_id.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                itemRatings.clear();
+
+                for (DataSnapshot item : dataSnapshot.getChildren()){
+
+                    if (item.hasChild(item_name)) {
+                        ProductRating rating = item.child(item_name).getValue(ProductRating.class);
+                        itemRatings.add(rating);
+                    }
+
+                }
+                sumRatings = itemRatings.stream().mapToDouble(ProductRating::getRating).sum();
+                numRatings = itemRatings.size();
+                textViewAverageRating.setText(numRatings == 0 ? "Average rating: 0.00" : String.format("Average rating: %.2f", sumRatings / numRatings));
+                textViewTotalRatings.setText(String.format("Total ratings: %d", numRatings));
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        if (user != null) {
+            dataBaseUserProduct.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    for (DataSnapshot item : dataSnapshot.getChildren()) {
+
+                        if (item.hasChild(item_name)) {
+                            btnAdd.setText("remove from your products");
+                            added = true;
+                        }
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
+    public void addRating(){
+        String key_id = item_name;
+        String user_id = user.getUid();
+        ProductRating productRating = new ProductRating(rating);
+        databaseUsers_id.child(user_id).child(key_id).setValue(productRating);
+        Toast.makeText(getContext(),"Product " + item_name + " successfully rated (" + rating + ")",Toast.LENGTH_LONG).show();
+    }
+
+    public void addButtonClick(){
+        if (!added) {
+            String user_id = user.getUid();
+            UserProduct userProduct = new UserProduct(item_name, item_description, item_imgUrl, item_onStock, item_price);
+            dataBaseUserProduct.child(user_id).child(item_name).setValue(userProduct);
+            Toast.makeText(getContext(), "Product " + item_name + " successfully added.", Toast.LENGTH_LONG).show();
+            added = true;
+        }else{
+            String user_id = user.getUid();
+            UserProduct userProduct = new UserProduct(item_name, item_description, item_imgUrl, item_onStock, item_price);
+            dataBaseUserProduct.child(user_id).child(item_name).removeValue();
+            Toast.makeText(getContext(), "Product " + item_name + " successfully removed.", Toast.LENGTH_LONG).show();
+            added = false;
+            btnAdd.setText("add to your products");
+        }
+    }
+
 }

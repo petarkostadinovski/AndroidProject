@@ -53,9 +53,9 @@
 
     <ListView
         android:id="@+id/listViewAccessories"
-        android:layout_width="418dp"
-        android:layout_height="610dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
+        android:layout_width="434dp"
+        android:layout_height="562dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.571"
         app:layout_constraintStart_toStartOf="parent"

@@ -6,61 +6,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Spinner
-        android:id="@+id/spinnerRateProduct"
-        android:layout_width="242dp"
-        android:layout_height="32dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="12dp"
-        android:entries="@array/spinnerRateProduct"
+    <ImageView
+        android:id="@+id/imageViewItem"
+        android:layout_width="168dp"
+        android:layout_height="104dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="136dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewItemDescription" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/sym_def_app_icon" />
+
+    <Button
+        android:id="@+id/btnAddItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="92dp"
+        android:text="add to your products"
+        android:textSize="8sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageViewItem"
+        app:layout_constraintTop_toBottomOf="@+id/textViewItemPrice" />
 
     <TextView
         android:id="@+id/textViewItemDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="28dp"
         android:text="Description"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageViewItem" />
 
-    <ImageView
-        android:id="@+id/imageViewItem"
-        android:layout_width="168dp"
-        android:layout_height="104dp"
-        android:layout_marginTop="140dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/sym_def_app_icon" />
-
-    <ImageView
-        android:id="@+id/imageViewRateIcon"
-        android:layout_width="39dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="37dp"
-        android:layout_marginEnd="92dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnAddItem"
-        app:srcCompat="@drawable/rate_icon"
-        tools:src="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/textViewItemName"
-        android:layout_width="wrap_content"
-        android:layout_height="28dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="140dp"
-        android:text="TextView"
-        android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/imageViewItem"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/textViewClickToRate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="68dp"
+        android:layout_height="15dp"
         android:layout_marginTop="1dp"
         android:layout_marginEnd="76dp"
         android:text="Click to rate!"
@@ -69,35 +50,76 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageViewRateIcon" />
 
+    <ImageView
+        android:id="@+id/imageViewRateIcon"
+        android:layout_width="39dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="92dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnAddItem"
+        app:srcCompat="@drawable/rate_icon"
+        tools:src="@tools:sample/avatars" />
+
     <TextView
         android:id="@+id/textViewOnStockItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="136dp"
         android:text="OnStock"
         app:layout_constraintStart_toEndOf="@+id/imageViewItem"
-        app:layout_constraintTop_toBottomOf="@+id/textViewItemName" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/spinnerRateProduct"
+        android:layout_width="242dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="60dp"
+        android:entries="@array/spinnerRateProduct"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewItemDescription" />
+
+    <TextView
+        android:id="@+id/textViewItemName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="96dp"
+        android:text="TextView"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textViewItemPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="14dp"
         android:text="Price"
         app:layout_constraintStart_toEndOf="@+id/imageViewItem"
         app:layout_constraintTop_toBottomOf="@+id/textViewOnStockItem" />
 
-    <Button
-        android:id="@+id/btnAddItem"
+    <TextView
+        android:id="@+id/textViewAverageRating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="20dp"
-        android:text="add to your products"
-        android:textSize="8sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewItemName" />
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="32dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewItemDescription" />
+
+    <TextView
+        android:id="@+id/textViewTotalRatings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="59dp"
+        android:layout_marginTop="32dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/textViewAverageRating"
+        app:layout_constraintTop_toBottomOf="@+id/textViewItemDescription" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

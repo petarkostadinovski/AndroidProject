@@ -26,7 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements HomeFragment.OnHomeFragmentInteraction, KeyFragment.OnKeyFragmentInteraction, SelectCarFragment.CarFragmentInteraction, AccessoriesFragment.OnAccessoriesFragmentInteraction {
+public class MainActivity extends AppCompatActivity implements HomeFragment.OnHomeFragmentInteraction, KeyFragment.OnKeyFragmentInteraction, SelectCarFragment.CarFragmentInteraction, AccessoriesFragment.OnAccessoriesFragmentInteraction, ProfileFragment.OnProfileFragmentInteraction {
 
     private ProfileFragment profileFragment;
     private HomeFragment homeFragment;
@@ -38,8 +38,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnHo
     private FrameLayout selectCarFragment_container;
     private FrameLayout fragment_container;
     private int id;
-    private boolean homeClicked;
-    private boolean profileClicked;
 
     @Override
     public void itemClick(Key key) {
@@ -66,8 +64,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnHo
         itemFragment = new ItemFragment();
         selectCarFragment_container = (FrameLayout)findViewById(R.id.selectCarFragment_container);
         fragment_container = (FrameLayout)findViewById(R.id.fragment_container);
-        homeClicked = false;
-        profileClicked = false;
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigation);
         bottomNav.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
 
@@ -76,8 +72,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnHo
     @Override
     protected void onStart() {
         super.onStart();
-        homeClicked = true;
-        profileClicked = false;
         homeFragment = new HomeFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -93,11 +87,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnHo
             firebaseAuth = firebaseAuth.getInstance();
             FirebaseUser user = firebaseAuth.getCurrentUser();
 
-            if (itemId == R.id.nav_profile && !profileClicked){
+            if (itemId == R.id.nav_profile){
                 AlertDialog.Builder builder = new AlertDialog.Builder(getBaseContext());
-
-                profileClicked = true;
-                homeClicked = false;
                 profileFragment = new ProfileFragment();
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -105,9 +96,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnHo
                 transaction.replace(fragment_container.getId(), profileFragment, "PROFILE_FRAGMENT").commit();
                 return true;
             }
-            else if (itemId == R.id.nav_home && !homeClicked){
-                homeClicked = true;
-                profileClicked = false;
+            else if (itemId == R.id.nav_home){
                 homeFragment = new HomeFragment();
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -138,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnHo
         transaction.addToBackStack(null);
         transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_left);
         transaction.replace(fragment_container.getId(), keyFragment, "KEY_FRAGMENT").commit();
-        homeClicked = false;
     }
 
     @Override
@@ -147,7 +135,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnHo
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.addToBackStack(null);
-        homeClicked = false;
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right);
         transaction.replace(fragment_container.getId(), selectCarFragment, "SELECT_CAR_FRAGMENT").commit();
     }
@@ -178,5 +165,14 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnHo
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.addToBackStack(null);
         transaction.replace(fragment_container.getId(), itemFragment, "ITEM_FRAGMENT").commit();
+    }
+
+    @Override
+    public void openHomeFrgment() {
+//        homeFragment = new HomeFragment();
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction transaction = fragmentManager.beginTransaction();
+//        transaction.addToBackStack(null);
+//        transaction.replace(fragment_container.getId(), homeFragment, "HOME_FRAGMENT").commit();
     }
 }

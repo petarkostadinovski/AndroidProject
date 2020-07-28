@@ -62,8 +62,8 @@
 
     <ListView
         android:id="@+id/listViewKeys"
-        android:layout_width="418dp"
-        android:layout_height="610dp"
+        android:layout_width="428dp"
+        android:layout_height="566dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.571"

@@ -1,6 +1,7 @@
 package com.example.firebaseproject.Model;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,7 +69,8 @@ public class KeyList extends ArrayAdapter<Key>{
 
         holder.textViewKeyName.setText(key.getName());
         holder.textViewKeyPrice.setText(String.valueOf(key.getPrice()) + " ден.");
-        holder.textViewOnStock.setText(key.getOn_stock() == 1 ? "Available" : "Not available");
+        holder.textViewOnStock.setText(key.getOn_stock() == 1 ? "On stock: Available" : "On stock: Not available");
+        holder.textViewOnStock.setTextColor(key.getOn_stock() == 1 ? Color.GREEN : Color.RED);
         Picasso.get().load(key.getImage_url()).into(holder.imageViewKey);
 
         return convertView;

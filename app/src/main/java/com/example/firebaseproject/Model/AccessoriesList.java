@@ -1,6 +1,7 @@
 package com.example.firebaseproject.Model;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,9 +72,10 @@ public class AccessoriesList extends ArrayAdapter<Keychain> {
 //        textViewOnStock.setText(keychain.getOn_stock() == 1 ? "Available" : "Not available");
 //        textViewKeyName.setText(keychain.getName());
 //        textViewKeyPrice.setText(keychain.getPrice() + " den.");
-        holder.textViewKeyName.setText(keychain.getName());
-        holder.textViewKeyPrice.setText(String.valueOf(keychain.getPrice()));
-        holder.textViewOnStock.setText(keychain.getOn_stock() == 1 ? "Available" : "Not available");
+        holder.textViewKeyName.setText("Name: " + keychain.getName());
+        holder.textViewKeyPrice.setText(String.valueOf(keychain.getPrice()) + " ден.");
+        holder.textViewOnStock.setText(keychain.getOn_stock() == 1 ? "On stock: Available" : "On stock: Not available");
+        holder.textViewOnStock.setTextColor(keychain.getOn_stock() == 1 ? Color.GREEN : Color.RED);
         Picasso.get().load(keychain.getImage_url()).into(holder.imageViewKey);
 
         return convertView;
