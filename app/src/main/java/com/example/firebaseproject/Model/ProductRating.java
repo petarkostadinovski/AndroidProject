@@ -4,19 +4,19 @@ public class ProductRating {
 
     String product_id;
     String user_id;
-    int rating;
+    float rating;
 
     public ProductRating(){}
 
-    public ProductRating (int rating){
+    public ProductRating (float rating){
         this.rating = rating;
     }
     
-    public int getRating() {
+    public float getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(float rating) {
         this.rating = rating;
     }
 }

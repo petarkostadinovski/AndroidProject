@@ -26,6 +26,11 @@
         <item>5</item>
     </string-array>
 
+    <string-array name="spinnerProducts">
+        <item>Your products</item>
+        <item>Products rated by you</item>
+    </string-array>
+
     <string-array name="spinnerItemsAccessories">
         <item>Filter accessories</item>
         <item>Sort by name (asc)</item>

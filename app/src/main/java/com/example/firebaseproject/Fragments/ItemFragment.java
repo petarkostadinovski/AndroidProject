@@ -7,12 +7,14 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,7 +46,7 @@ public class ItemFragment extends Fragment {
     private static final String ITEM_DESCRIPTION = "description";
     private static final String ITEM_ONSTOCK = "onStock";
 
-    private ImageView imageViewRateIcon;
+    private RatingBar ratingBar;
     private boolean added = false;
 
     // TODO: Rename and change types of parameters
@@ -57,12 +59,12 @@ public class ItemFragment extends Fragment {
 
     private ImageView imageViewItem;
     private TextView textViewItemName;
+    private TextView textViewRemoveRating;
     private TextView textViewItemDescription;
     private TextView textViewItemOnStock;
     private TextView textViewItemPrice;
     private TextView textViewAverageRating;
     private TextView textViewTotalRatings;
-    private Spinner spinnerRateProduct;
     private Button btnAdd;
 
     List<ProductRating> itemRatings;
@@ -71,7 +73,6 @@ public class ItemFragment extends Fragment {
     private double sumRatings = 0;
     private int numRatings = 0;
 
-    private DatabaseReference databaseReference;
     private DatabaseReference databaseUsers_id;
     private DatabaseReference dataBaseRatings;
     private DatabaseReference dataBaseUserProduct;
@@ -113,7 +114,6 @@ public class ItemFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_item, container, false);
 
-        imageViewRateIcon = view.findViewById(R.id.imageViewRateIcon);
         imageViewItem = view.findViewById(R.id.imageViewItem);
         textViewItemDescription = view.findViewById(R.id.textViewItemDescription);
         textViewItemName = view.findViewById(R.id.textViewItemName);
@@ -121,27 +121,27 @@ public class ItemFragment extends Fragment {
         textViewItemPrice = view.findViewById(R.id.textViewItemPrice);
         textViewAverageRating = view.findViewById(R.id.textViewAverageRating);
         textViewTotalRatings = view.findViewById(R.id.textViewTotalRatings);
-        spinnerRateProduct = view.findViewById(R.id.spinnerRateProduct);
+        textViewRemoveRating = view.findViewById(R.id.textViewRemoveRating);
         btnAdd = view.findViewById(R.id.btnAddItem);
-
+        ratingBar = view.findViewById(R.id.ratingBar);
         itemRatings = new ArrayList<>();
-
         firebaseAuth = firebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
 
+        textViewRemoveRating.setVisibility(View.GONE);
+
         databaseUsers_id = FirebaseDatabase.getInstance().getReference("product_rating");
         dataBaseUserProduct = FirebaseDatabase.getInstance().getReference("user_product");
-        databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        imageViewRateIcon.setOnClickListener(new View.OnClickListener() {
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
-            public void onClick(View v) {
-                if (spinnerRateProduct.getSelectedItemPosition() != 0 && user != null){
-                    addRating();
-                }
-                else if (spinnerRateProduct.getSelectedItemPosition() == 0 && user != null){
-                    Toast.makeText(getContext(),"Please select value!",Toast.LENGTH_LONG).show();
-                }else{
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                if (user != null){
+                    if (rating != 0){
+                        addRating(rating);
+                        Toast.makeText(getContext(), "Product " + item_name + " successfully rated (" + rating + ").", Toast.LENGTH_LONG).show();
+                    }
+                }else {
                     Toast.makeText(getContext(),"Please log in!",Toast.LENGTH_LONG).show();
                 }
             }
@@ -157,19 +157,6 @@ public class ItemFragment extends Fragment {
                 }
             }
         });
-
-        spinnerRateProduct.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                rating = position;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
 
         if (getArguments() != null){
             textViewItemName.setText("Name: " + item_name);
@@ -215,15 +202,33 @@ public class ItemFragment extends Fragment {
             dataBaseUserProduct.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                    for (DataSnapshot item : dataSnapshot.getChildren()) {
-
-                        if (item.hasChild(item_name)) {
-                            btnAdd.setText("remove from your products");
-                            added = true;
-                        }
-
+                    if (dataSnapshot.hasChild(user.getUid()) && dataSnapshot.child(user.getUid()).hasChild(item_name)){
+                        added = true;
+                        btnAdd.setText("remove from your products");
                     }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+            databaseUsers_id.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.hasChild(user.getUid()) && dataSnapshot.child(user.getUid()).hasChild(item_name)){
+                        ProductRating rating = dataSnapshot.child(user.getUid()).child(item_name).getValue(ProductRating.class);
+                        ratingBar.setRating(rating.getRating());
+                        textViewRemoveRating.setVisibility(View.VISIBLE);
+                    }
+
+                    textViewRemoveRating.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            removeRating();
+                        }
+                    });
+
                 }
 
                 @Override
@@ -234,12 +239,11 @@ public class ItemFragment extends Fragment {
         }
     }
 
-    public void addRating(){
+    public void addRating(float rating){
         String key_id = item_name;
         String user_id = user.getUid();
         ProductRating productRating = new ProductRating(rating);
         databaseUsers_id.child(user_id).child(key_id).setValue(productRating);
-        Toast.makeText(getContext(),"Product " + item_name + " successfully rated (" + rating + ")",Toast.LENGTH_LONG).show();
     }
 
     public void addButtonClick(){
@@ -248,6 +252,7 @@ public class ItemFragment extends Fragment {
             UserProduct userProduct = new UserProduct(item_name, item_description, item_imgUrl, item_onStock, item_price);
             dataBaseUserProduct.child(user_id).child(item_name).setValue(userProduct);
             Toast.makeText(getContext(), "Product " + item_name + " successfully added.", Toast.LENGTH_LONG).show();
+            btnAdd.setText("remove from your products");
             added = true;
         }else{
             String user_id = user.getUid();
@@ -257,6 +262,13 @@ public class ItemFragment extends Fragment {
             added = false;
             btnAdd.setText("add to your products");
         }
+    }
+
+    public void removeRating(){
+        Toast.makeText(getContext(), "Rating on product " + item_name + " successfully removed.", Toast.LENGTH_LONG).show();
+        databaseUsers_id.child(user.getUid()).child(item_name).removeValue();
+        ratingBar.setRating(0);
+        textViewRemoveRating.setVisibility(View.GONE);
     }
 
 }

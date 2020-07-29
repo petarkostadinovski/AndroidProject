@@ -201,10 +201,12 @@ public class KeyFragment extends Fragment {
                         progressBar.setVisibility(View.GONE);
                     listViewKeys.setAdapter(adapter);
                 }else {
-                    adapter = new KeyList(getActivity(), keyList);
-                    if (!adapter.isEmpty())
-                        progressBar.setVisibility(View.GONE);
-                    listViewKeys.setAdapter(adapter);
+                    if (!keyList.isEmpty()) {
+                        adapter = new KeyList(getActivity(), keyList);
+                        if (!adapter.isEmpty())
+                            progressBar.setVisibility(View.GONE);
+                        listViewKeys.setAdapter(adapter);
+                    }
                 }
 
                 imageViewSearchKeys.setOnClickListener(new View.OnClickListener() {

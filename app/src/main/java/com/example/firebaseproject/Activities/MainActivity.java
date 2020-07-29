@@ -19,6 +19,7 @@ import com.example.firebaseproject.Fragments.ProfileFragment;
 import com.example.firebaseproject.Fragments.SelectCarFragment;
 import com.example.firebaseproject.Model.Key;
 import com.example.firebaseproject.Model.Keychain;
+import com.example.firebaseproject.Model.UserProduct;
 import com.example.firebaseproject.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -156,6 +157,15 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnHo
             transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_left);
             transaction.replace(fragment_container.getId(), keyFragment, "KEY_FRAGMENT").commit();
         }
+    }
+
+    @Override
+    public void itemClickProfileFragment(UserProduct product) {
+        itemFragment = ItemFragment.itemFragmentInstance(product.getName(), product.getDescription(), product.getImage_url(), product.getPrice(), product.getOn_stock());
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.addToBackStack(null);
+        transaction.replace(fragment_container.getId(), itemFragment, "ITEM_FRAGMENT").commit();
     }
 
     @Override

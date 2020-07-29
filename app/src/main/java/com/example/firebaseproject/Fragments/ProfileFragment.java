@@ -10,14 +10,20 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.firebaseproject.Activities.LoginActivity;
 import com.example.firebaseproject.Activities.MainActivity;
 import com.example.firebaseproject.Activities.RegistrationActivity;
 import com.example.firebaseproject.Model.Key;
+import com.example.firebaseproject.Model.KeyList;
+import com.example.firebaseproject.Model.ProductList;
+import com.example.firebaseproject.Model.UserProduct;
 import com.example.firebaseproject.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,7 +33,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,17 +52,23 @@ public class ProfileFragment extends Fragment {
 
     private FirebaseAuth firebaseAuth;
     private ListView listViewUserProducts;
-
+    private ProductList adapter;
+    private Spinner spinnerProducts;
     private OnProfileFragmentInteraction onProfileFragmentInteraction;
-
+    private ProgressBar progressBarProfile;
     private DatabaseReference dataBaseUserProduct;
-    private List<Key> productList;
+    private DatabaseReference dataBaseUserRatings;
+    private List<UserProduct> productList;
+    private List<UserProduct> ratedProducts;
+    private List<String> ratedProductsNames;
     private TextView textViewUserEmail;
     private Button buttonLogout;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    FirebaseUser user;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -93,8 +108,13 @@ public class ProfileFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_profile2, container, false);
         firebaseAuth = firebaseAuth.getInstance();
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        listViewUserProducts = view.findViewById(R.id.listViewUsersProducts);
+        user = firebaseAuth.getCurrentUser();
+        productList = new ArrayList<>();
+        listViewUserProducts = view.findViewById(R.id.listViewUserProducts);
+        spinnerProducts = view.findViewById(R.id.spinnerProducts);
+        ratedProductsNames = new ArrayList<>();
+        ratedProducts = new ArrayList<>();
+        progressBarProfile = view.findViewById(R.id.progressBarProfile);
 
         if (user == null) {
             startActivity(new Intent(getContext(), RegistrationActivity.class));
@@ -104,7 +124,13 @@ public class ProfileFragment extends Fragment {
             textViewUserEmail.setText(user.getEmail());
             buttonLogout = view.findViewById(R.id.buttonLogout);
 
-            dataBaseUserProduct = FirebaseDatabase.getInstance().getReference(user.getUid());
+            listViewUserProducts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    UserProduct product = (UserProduct) listViewUserProducts.getItemAtPosition(position);
+                    itemClickProfileFragment(product);
+                }
+            });
 
             buttonLogout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -122,17 +148,75 @@ public class ProfileFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        dataBaseUserProduct.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        if (user != null) {
 
-            }
+            dataBaseUserProduct = FirebaseDatabase.getInstance().getReference("user_product").child(user.getUid());
+            dataBaseUserRatings = FirebaseDatabase.getInstance().getReference("product_rating").child(user.getUid());
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            dataBaseUserProduct.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    productList.clear();
 
-            }
-        });
+                    for (DataSnapshot item : dataSnapshot.getChildren()) {
+                        UserProduct product = item.getValue(UserProduct.class);
+                        productList.add(product);
+                    }
+                    progressBarProfile.setVisibility(View.VISIBLE);
+                    adapter = new ProductList(getActivity(), productList);
+                    if (!adapter.isEmpty())
+                        progressBarProfile.setVisibility(View.GONE);
+                    listViewUserProducts.setAdapter(adapter);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+            dataBaseUserRatings.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    ratedProductsNames.clear();
+
+                    for (DataSnapshot item : dataSnapshot.getChildren()) {
+                        String name = item.getKey();
+                        ratedProductsNames.add(name);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+            spinnerProducts.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (position == 0){
+                        adapter = new ProductList(getActivity(), productList);
+                        listViewUserProducts.setAdapter(adapter);
+                    }else{
+                        for (String name : ratedProductsNames){
+                            for (UserProduct product : productList){
+                                if (product.getName().equals(name))
+                                    ratedProducts.add(product);
+                            }
+                        }
+                        adapter = new ProductList(getActivity(), ratedProducts);
+                        listViewUserProducts.setAdapter(adapter);
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+        }
     }
 
     @Override
@@ -151,6 +235,7 @@ public class ProfileFragment extends Fragment {
 
     public interface OnProfileFragmentInteraction{
         void openHomeFrgment();
+        void itemClickProfileFragment(UserProduct product);
     }
 
     public void openHomeFragment(){
@@ -158,7 +243,9 @@ public class ProfileFragment extends Fragment {
             onProfileFragmentInteraction.openHomeFrgment();
         }
     }
-
-
-
+    public void itemClickProfileFragment(UserProduct userProduct){
+        if (onProfileFragmentInteraction != null){
+            onProfileFragmentInteraction.itemClickProfileFragment(userProduct);
+        }
+    }
 }
