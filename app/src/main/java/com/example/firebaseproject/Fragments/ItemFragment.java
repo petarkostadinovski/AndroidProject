@@ -242,7 +242,8 @@ public class ItemFragment extends Fragment {
     public void addRating(float rating){
         String key_id = item_name;
         String user_id = user.getUid();
-        ProductRating productRating = new ProductRating(rating);
+        UserProduct product = new UserProduct(item_name, item_description, item_imgUrl, item_onStock, item_price);
+        ProductRating productRating = new ProductRating(product, rating);
         databaseUsers_id.child(user_id).child(key_id).setValue(productRating);
     }
 

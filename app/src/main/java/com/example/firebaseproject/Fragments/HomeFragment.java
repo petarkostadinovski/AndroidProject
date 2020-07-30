@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,6 +30,8 @@ public class HomeFragment extends Fragment {
     private ImageView imageViewAccessoies;
     private TextView textViewKeys;
     private TextView textViewAccessories;
+    private TextView textViewWelcome;
+    private ImageView imageViewKey;
     private OnHomeFragmentInteraction onHomeFragmentInteraction;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -70,6 +74,14 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    private void RunAnimation()
+    {
+        Animation a = AnimationUtils.loadAnimation(getContext(), R.anim.text_animation);
+        a.reset();
+        imageViewKey.clearAnimation();
+        imageViewKey.startAnimation(a);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -79,6 +91,8 @@ public class HomeFragment extends Fragment {
         imageViewAccessoies = view.findViewById(R.id.imageViewAccessories);
         textViewKeys = view.findViewById(R.id.textViewKeys);
         textViewAccessories = view.findViewById(R.id.textViewAccessories);
+        textViewWelcome = view.findViewById(R.id.textViewKeyStore);
+        imageViewKey = view.findViewById(R.id.imageViewKey);
 
         imageViewKeys.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,7 +121,7 @@ public class HomeFragment extends Fragment {
                 openAccessoriesFragment();
             }
         });
-
+        RunAnimation();
         return view;
     }
 

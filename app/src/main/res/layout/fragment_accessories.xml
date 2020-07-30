@@ -55,7 +55,7 @@
         android:id="@+id/listViewAccessories"
         android:layout_width="412dp"
         android:layout_height="561dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.571"

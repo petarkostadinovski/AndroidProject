@@ -72,7 +72,6 @@ public class KeyList extends ArrayAdapter<Key>{
         holder.textViewOnStock.setText(key.getOn_stock() == 1 ? "On stock: Available" : "On stock: Not available");
         holder.textViewOnStock.setTextColor(key.getOn_stock() == 1 ? Color.GREEN : Color.RED);
         Picasso.get().load(key.getImage_url()).into(holder.imageViewKey);
-
         return convertView;
     }
 }

@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -144,6 +146,8 @@ public class KeyFragment extends Fragment {
         keyServiceImpl = new KeyServiceImplementation();
         progressBar = view.findViewById(R.id.progressBar1);
 
+//        RunAnimation();
+
         listViewKeys.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -202,7 +206,8 @@ public class KeyFragment extends Fragment {
                     listViewKeys.setAdapter(adapter);
                 }else {
                     if (!keyList.isEmpty()) {
-                        adapter = new KeyList(getActivity(), keyList);
+                        if (getActivity() != null)
+                            adapter = new KeyList(getActivity(), keyList);
                         if (!adapter.isEmpty())
                             progressBar.setVisibility(View.GONE);
                         listViewKeys.setAdapter(adapter);
@@ -276,6 +281,14 @@ public class KeyFragment extends Fragment {
             }
         });
     }
+
+//    private void RunAnimation()
+//    {
+//        Animation a = AnimationUtils.loadAnimation(getContext(), R.anim.zoom_in_out);
+//        a.reset();
+//        imageViewChooseCar.clearAnimation();
+//        imageViewChooseCar.startAnimation(a);
+//    }
 
     public interface OnKeyFragmentInteraction{
         void openCarFragment();

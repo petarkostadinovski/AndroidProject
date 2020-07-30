@@ -100,7 +100,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                         if(task.isSuccessful()){
                             finish();
                             //Toast.makeText(MainActivity.this,"Successfully registered",Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+                            startActivity(new Intent(getApplicationContext(),MainActivity.class));
                         }
                         else if (password.length() <= 5){
                             Toast.makeText(RegistrationActivity.this,"Password length should be more that 5 characters", Toast.LENGTH_LONG).show();

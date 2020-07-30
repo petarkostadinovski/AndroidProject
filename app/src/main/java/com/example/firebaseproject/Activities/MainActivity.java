@@ -7,9 +7,17 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.example.firebaseproject.Fragments.AccessoriesFragment;
 import com.example.firebaseproject.Fragments.HomeFragment;
@@ -25,6 +33,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.IOException;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements HomeFragment.OnHomeFragmentInteraction, KeyFragment.OnKeyFragmentInteraction, SelectCarFragment.CarFragmentInteraction, AccessoriesFragment.OnAccessoriesFragmentInteraction, ProfileFragment.OnProfileFragmentInteraction {
@@ -34,11 +43,13 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnHo
     private KeyFragment keyFragment;
     private SelectCarFragment selectCarFragment;
     private ItemFragment itemFragment;
-
+    private ImageView imageViewProfilePicture;
     private AccessoriesFragment accessoriesFragment;
     private FrameLayout selectCarFragment_container;
     private FrameLayout fragment_container;
     private int id;
+    static final int PICK_IMAGE = 1;
+    private Uri imageUri;
 
     @Override
     public void itemClick(Key key) {
@@ -67,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnHo
         fragment_container = (FrameLayout)findViewById(R.id.fragment_container);
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigation);
         bottomNav.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
+
 
     }
 
@@ -156,6 +168,30 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnHo
             transaction.addToBackStack(null);
             transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_left);
             transaction.replace(fragment_container.getId(), keyFragment, "KEY_FRAGMENT").commit();
+        }
+    }
+
+    @Override
+    public void addProfilePicture() {
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK){
+            imageUri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),imageUri);
+//                imageViewProfilePicture.setImageBitmap(Bitmap.createScaledBitmap(bitmap, 80, 80, false));
+                ProfileFragment profileFragment = ProfileFragment.newInstanceProfileFragmentImage(bitmap);
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.addToBackStack(null);
+                transaction.replace(fragment_container.getId(), profileFragment, "PROFILE_FRAGMENT").commit();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
         }
     }
 
