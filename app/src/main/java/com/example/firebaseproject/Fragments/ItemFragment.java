@@ -139,10 +139,12 @@ public class ItemFragment extends Fragment {
                 if (user != null){
                     if (rating != 0){
                         addRating(rating);
-                        Toast.makeText(getContext(), "Product " + item_name + " successfully rated (" + rating + ").", Toast.LENGTH_LONG).show();
+                        if (getContext() != null)
+                            Toast.makeText(getContext(), "Product " + item_name + " successfully rated (" + rating + ").", Toast.LENGTH_LONG).show();
                     }
                 }else {
-                    Toast.makeText(getContext(),"Please log in!",Toast.LENGTH_LONG).show();
+                    if (getContext() != null)
+                        Toast.makeText(getContext(),"Please log in!",Toast.LENGTH_LONG).show();
                 }
             }
         });

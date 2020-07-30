@@ -1,7 +1,6 @@
 package com.example.firebaseproject.Fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,8 +14,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.firebaseproject.Activities.KeysActivity;
-import com.example.firebaseproject.Activities.MainActivity;
 import com.example.firebaseproject.R;
 
 /**

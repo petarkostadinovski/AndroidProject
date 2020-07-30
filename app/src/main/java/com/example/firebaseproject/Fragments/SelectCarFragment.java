@@ -1,11 +1,8 @@
 package com.example.firebaseproject.Fragments;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
@@ -19,9 +16,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.firebaseproject.Activities.CarsActivity;
-import com.example.firebaseproject.Activities.KeysActivity;
-import com.example.firebaseproject.Activities.RegistrationActivity;
 import com.example.firebaseproject.Model.Car;
 import com.example.firebaseproject.R;
 import com.google.firebase.database.DataSnapshot;
@@ -111,8 +105,6 @@ public class SelectCarFragment extends Fragment {
         spinnerCarModel = view.findViewById(R.id.spinnerCarModel);
         spinnerCarYear = view.findViewById(R.id.spinnerCarYear);
         buttonFilterByCar = view.findViewById(R.id.buttonFilterByCar);
-
-        textViewTest = view.findViewById(R.id.textViewTest);
 
         carList = new ArrayList<>();
         carBrands = new ArrayList<>();

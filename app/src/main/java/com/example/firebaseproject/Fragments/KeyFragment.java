@@ -1,7 +1,6 @@
 package com.example.firebaseproject.Fragments;
 
 import android.content.Context;
-import android.graphics.Path;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,10 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -22,7 +18,6 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.firebaseproject.Activities.KeysActivity;
 import com.example.firebaseproject.Model.Car;
 import com.example.firebaseproject.Model.Key;
 import com.example.firebaseproject.Model.KeyList;
@@ -139,8 +134,6 @@ public class KeyFragment extends Fragment {
         spinnerCarBrand = view.findViewById(R.id.spinnerCarBrand);
         spinnerCarModel = view.findViewById(R.id.spinnerCarModel);
         spinnerCarYear = view.findViewById(R.id.spinnerCarYear);
-        container_keyFragment = view.findViewById(R.id.container_keyFragment);
-        container_carFragment = view.findViewById(R.id.container_carFragment);
         textViewKeys = view.findViewById(R.id.textViewKeys);
         searchedValue = String.valueOf(editTextSearchByName.getText());
         keyServiceImpl = new KeyServiceImplementation();
@@ -205,7 +198,7 @@ public class KeyFragment extends Fragment {
                         progressBar.setVisibility(View.GONE);
                     listViewKeys.setAdapter(adapter);
                 }else {
-                    if (!keyList.isEmpty()) {
+                    if (keyList != null && !keyList.isEmpty()) {
                         if (getActivity() != null)
                             adapter = new KeyList(getActivity(), keyList);
                         if (!adapter.isEmpty())

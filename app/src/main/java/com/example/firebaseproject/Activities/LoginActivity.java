@@ -42,12 +42,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        if (firebaseAuth.getCurrentUser() != null){
-            //start profile activity here
-            finish();
-            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-        }
-
         progressDialog = new ProgressDialog(this);
 
         buttonLogin.setOnClickListener(this);
@@ -71,7 +65,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             return;
         }
 
-        progressDialog.setMessage("Logging in...");
+        progressDialog.setMessage("Signing in...");
         progressDialog.show();
 
         firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

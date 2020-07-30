@@ -45,12 +45,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         //initializing firebase auth object
         firebaseAuth = FirebaseAuth.getInstance();
 
-        if (firebaseAuth.getCurrentUser() != null){
-            //start profile activity here
-            finish();
-            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-        }
-
         //initializing views
         editTextEmail = (EditText) findViewById(R.id.emailEditText);
         editTextPassword = (EditText) findViewById(R.id.passwordEditText);

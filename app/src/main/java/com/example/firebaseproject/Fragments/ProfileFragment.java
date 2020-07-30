@@ -74,6 +74,7 @@ public class ProfileFragment extends Fragment {
     private Bitmap image_argument;
     private String mParam2;
     private boolean swapToProductList;
+    private boolean ratedProductsIsEmpty;
 
     FirebaseUser user;
 
@@ -141,7 +142,7 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     firebaseAuth.signOut();
-                    Toast.makeText(getContext(),"Successfully logged out!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"Successfully signed out!", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getActivity(), MainActivity.class));
                 }
             });
@@ -191,11 +192,13 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     ratedProducts.clear();
-
+                    ratedProductsIsEmpty = true;
                     for (DataSnapshot item : dataSnapshot.getChildren()) {
                         ProductRating product = item.getValue(ProductRating.class);
                         ratedProducts.add(product.getProduct());
                     }
+                    if (!ratedProducts.isEmpty())
+                        ratedProductsIsEmpty = false;
                 }
 
                 @Override
@@ -223,8 +226,10 @@ public class ProfileFragment extends Fragment {
                         if(!ratedProducts.isEmpty())
                             listViewUserProducts.setAdapter(adapter);
                         else {
-                            Toast.makeText(getContext(), "Your rated product list is empty!", Toast.LENGTH_SHORT).show();
                             listViewUserProducts.setAdapter(null);
+                            if (ratedProductsIsEmpty) {
+                                Toast.makeText(getContext(), "Your rated product list is empty!", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 }

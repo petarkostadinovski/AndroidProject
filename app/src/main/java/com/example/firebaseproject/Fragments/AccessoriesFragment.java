@@ -165,8 +165,8 @@ public class AccessoriesFragment extends Fragment {
                     keychainList.add(keychain);
 
                 }
-
-                adapter = new AccessoriesList(getActivity(), keychainList);
+                if(getActivity() != null)
+                    adapter = new AccessoriesList(getActivity(), keychainList);
                 if (!adapter.isEmpty())
                     progressBar.setVisibility(View.GONE);
                 listViewAccessories.setAdapter(adapter);
