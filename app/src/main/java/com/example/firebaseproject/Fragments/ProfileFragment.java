@@ -174,6 +174,7 @@ public class ProfileFragment extends Fragment {
                     if (productList.isEmpty()) {
                         progressBarProfile.setVisibility(View.GONE);
                         Toast.makeText(getContext(),"Your product list is empty!", Toast.LENGTH_SHORT).show();
+                        listViewUserProducts.setAdapter(null);
                     }
                     if (!adapter.isEmpty())
                         progressBarProfile.setVisibility(View.GONE);
@@ -211,6 +212,7 @@ public class ProfileFragment extends Fragment {
                         if (swapToProductList && productList.isEmpty()) {
                             Toast.makeText(getContext(), "Your product list is empty!", Toast.LENGTH_SHORT).show();
                             swapToProductList = false;
+                            listViewUserProducts.setAdapter(null);
                         }
                         else
                             listViewUserProducts.setAdapter(adapter);
@@ -220,8 +222,10 @@ public class ProfileFragment extends Fragment {
                         swapToProductList = true;
                         if(!ratedProducts.isEmpty())
                             listViewUserProducts.setAdapter(adapter);
-                        else
-                            Toast.makeText(getContext(),"Your rated product list is empty!", Toast.LENGTH_SHORT).show();
+                        else {
+                            Toast.makeText(getContext(), "Your rated product list is empty!", Toast.LENGTH_SHORT).show();
+                            listViewUserProducts.setAdapter(null);
+                        }
                     }
                 }
 
