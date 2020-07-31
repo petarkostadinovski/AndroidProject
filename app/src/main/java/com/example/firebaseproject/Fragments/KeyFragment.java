@@ -54,7 +54,6 @@ public class KeyFragment extends Fragment {
     List<Key> filteredList;
     List<Car> carList;
     List<Key> filteredByCar;
-
     ImageView imageViewSearchKeys;
     public ImageView imageViewChooseCar;
 

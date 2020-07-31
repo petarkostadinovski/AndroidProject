@@ -23,24 +23,33 @@ import com.example.firebaseproject.Fragments.AccessoriesFragment;
 import com.example.firebaseproject.Fragments.HomeFragment;
 import com.example.firebaseproject.Fragments.ItemFragment;
 import com.example.firebaseproject.Fragments.KeyFragment;
+import com.example.firebaseproject.Fragments.LocationsFragment;
 import com.example.firebaseproject.Fragments.ProfileFragment;
 import com.example.firebaseproject.Fragments.SelectCarFragment;
 import com.example.firebaseproject.Model.Key;
 import com.example.firebaseproject.Model.Keychain;
 import com.example.firebaseproject.Model.UserProduct;
 import com.example.firebaseproject.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements HomeFragment.OnHomeFragmentInteraction, KeyFragment.OnKeyFragmentInteraction, SelectCarFragment.CarFragmentInteraction, AccessoriesFragment.OnAccessoriesFragmentInteraction, ProfileFragment.OnProfileFragmentInteraction {
 
     private ProfileFragment profileFragment;
     private HomeFragment homeFragment;
     private KeyFragment keyFragment;
+    private LocationsFragment locationsFragment;
     private SelectCarFragment selectCarFragment;
     private ItemFragment itemFragment;
     private ImageView imageViewProfilePicture;
@@ -68,8 +77,10 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnHo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
+
         profileFragment = new ProfileFragment();
         homeFragment = new HomeFragment();
+        locationsFragment = new LocationsFragment();
         keyFragment = new KeyFragment();
         selectCarFragment = new SelectCarFragment();
         accessoriesFragment = new AccessoriesFragment();
@@ -115,6 +126,14 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnHo
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.addToBackStack(null);
                 transaction.replace(fragment_container.getId(), homeFragment, "HOME_FRAGMENT").commit();
+                return true;
+            }
+            else if (itemId == R.id.nav_locations){
+                locationsFragment = new LocationsFragment();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.addToBackStack(null);
+                transaction.replace(fragment_container.getId(), locationsFragment, "LOCATIONS_FRAGMENT").commit();
                 return true;
             }
             else
@@ -221,4 +240,5 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnHo
 //        transaction.addToBackStack(null);
 //        transaction.replace(fragment_container.getId(), homeFragment, "HOME_FRAGMENT").commit();
     }
+
 }
