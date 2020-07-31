@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,9 +31,14 @@ import com.example.firebaseproject.Model.ProductList;
 import com.example.firebaseproject.Model.ProductRating;
 import com.example.firebaseproject.Model.UserProduct;
 import com.example.firebaseproject.R;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.dynamic.IFragmentWrapper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -69,7 +75,8 @@ public class ProfileFragment extends Fragment {
     private Button buttonLogout;
     private TextView textViewChangeProfilePicture;
     private ImageView imageViewProfilePicture;
-
+    private ImageView imageViewGoogleIcon;
+    GoogleSignInClient mGoogleSignInClient;
     // TODO: Rename and change types of parameters
     private Bitmap image_argument;
     private String mParam2;
@@ -77,6 +84,7 @@ public class ProfileFragment extends Fragment {
     private boolean ratedProductsIsEmpty;
 
     FirebaseUser user;
+
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -112,6 +120,13 @@ public class ProfileFragment extends Fragment {
         ratedProducts = new ArrayList<>();
         progressBarProfile = view.findViewById(R.id.progressBarProfile);
         swapToProductList = false;
+        imageViewGoogleIcon = view.findViewById(R.id.imageViewGoogleIcon);
+        imageViewGoogleIcon.setVisibility(View.GONE);
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
 
         if (user == null) {
             startActivity(new Intent(getContext(), RegistrationActivity.class));
@@ -122,6 +137,13 @@ public class ProfileFragment extends Fragment {
             buttonLogout = view.findViewById(R.id.buttonLogout);
             imageViewProfilePicture = view.findViewById(R.id.imageViewProfilePicture);
             textViewChangeProfilePicture = view.findViewById(R.id.textViewChangeProfilePicture);
+
+            FirebaseUser userProfile = FirebaseAuth.getInstance().getCurrentUser();
+            for (UserInfo profile : userProfile.getProviderData()) {
+                String providerId = profile.getProviderId();
+                if (providerId.equals(GoogleAuthProvider.PROVIDER_ID))
+                    imageViewGoogleIcon.setVisibility(View.VISIBLE);
+            }
 
             textViewChangeProfilePicture.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -144,6 +166,8 @@ public class ProfileFragment extends Fragment {
                     firebaseAuth.signOut();
                     Toast.makeText(getContext(),"Successfully signed out!", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getActivity(), MainActivity.class));
+                    mGoogleSignInClient.signOut();
+
                 }
             });
 

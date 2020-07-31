@@ -15,6 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.firebaseproject.R;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +33,7 @@ public class HomeFragment extends Fragment {
     private TextView textViewWelcome;
     private ImageView imageViewKey;
     private OnHomeFragmentInteraction onHomeFragmentInteraction;
+    GoogleSignInClient mGoogleSignInClient;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -90,6 +94,7 @@ public class HomeFragment extends Fragment {
         textViewAccessories = view.findViewById(R.id.textViewAccessories);
         textViewWelcome = view.findViewById(R.id.textViewKeyStore);
         imageViewKey = view.findViewById(R.id.imageViewKey);
+
 
         imageViewKeys.setOnClickListener(new View.OnClickListener() {
             @Override
