@@ -4,49 +4,81 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.ProfileActivity">
+   >
 
-    <TextView
-        android:id="@+id/textViewUserEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="84dp"
-        android:layout_marginEnd="5dp"
-        android:text="user email"
-        app:layout_constraintEnd_toStartOf="@+id/buttonLogout"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/buttonLogout"
-        android:layout_width="63dp"
-        android:layout_height="29dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="20dp"
-        android:text="Sign out"
-        android:textSize="8sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ListView
-        android:id="@+id/listViewUserProducts"
-        android:layout_width="415dp"
-        android:layout_height="415dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginBottom="110dp"
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="411dp"
+        android:layout_height="219dp"
+        android:layout_marginTop="10dp"
+        android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerProducts" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.031"
+        app:srcCompat="@drawable/key_background"
+        tools:srcCompat="@drawable/key_background" />
 
     <Spinner
         android:id="@+id/spinnerProducts"
         android:layout_width="242dp"
         android:layout_height="32dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="156dp"
         android:entries="@array/spinnerProducts"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewProfilePicture" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonLogout"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="63dp"
+        android:layout_height="29dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="4dp"
+        android:background="@drawable/round_button"
+        android:backgroundTint="#997FE6"
+        android:text="Sign out"
+        android:textColor="@android:color/white"
+        android:textSize="8sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewUserEmail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="100dp"
+        android:text="user email"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageViewGoogleIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="28dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="96dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_default="wrap"
+        app:srcCompat="@drawable/google_icon"
+        tools:src="@tools:sample/avatars" />
+
+    <ListView
+        android:id="@+id/listViewUserProducts"
+        android:layout_width="415dp"
+        android:layout_height="415dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <ProgressBar
         android:id="@+id/progressBarProfile"
@@ -58,36 +90,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageViewProfilePicture"
-        android:layout_width="73dp"
-        android:layout_height="55dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="84dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/sym_def_app_icon"
-        tools:srcCompat="@tools:sample/avatars[8]" />
-
-    <TextView
-        android:id="@+id/textViewChangeProfilePicture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="127dp"
-        android:text="Choose image"
-        android:textSize="10sp"
-        app:layout_constraintStart_toEndOf="@+id/imageViewProfilePicture"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageViewGoogleIcon"
-        android:layout_width="20dp"
-        android:layout_height="28dp"
-        android:layout_marginTop="80dp"
-        app:layout_constraintEnd_toStartOf="@+id/textViewUserEmail"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars"
-        app:srcCompat="@drawable/google_icon"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -101,10 +101,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        //getting the auth credential
+
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
 
-        //Now using firebase we are signing in the user here
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override

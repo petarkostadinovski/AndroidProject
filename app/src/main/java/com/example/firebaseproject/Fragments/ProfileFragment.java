@@ -74,7 +74,6 @@ public class ProfileFragment extends Fragment {
     private TextView textViewUserEmail;
     private Button buttonLogout;
     private TextView textViewChangeProfilePicture;
-    private ImageView imageViewProfilePicture;
     private ImageView imageViewGoogleIcon;
     GoogleSignInClient mGoogleSignInClient;
     // TODO: Rename and change types of parameters
@@ -101,8 +100,7 @@ public class ProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            Bitmap imageBitmap = (Bitmap) getArguments().getParcelable(ARG_IMAGE);
-            imageViewProfilePicture.setImageBitmap(Bitmap.createScaledBitmap(imageBitmap, 120, 120, false));
+
         }
     }
 
@@ -135,8 +133,7 @@ public class ProfileFragment extends Fragment {
             textViewUserEmail = view.findViewById(R.id.textViewUserEmail);
             textViewUserEmail.setText(user.getEmail());
             buttonLogout = view.findViewById(R.id.buttonLogout);
-            imageViewProfilePicture = view.findViewById(R.id.imageViewProfilePicture);
-            textViewChangeProfilePicture = view.findViewById(R.id.textViewChangeProfilePicture);
+
 
             FirebaseUser userProfile = FirebaseAuth.getInstance().getCurrentUser();
             for (UserInfo profile : userProfile.getProviderData()) {
@@ -145,12 +142,7 @@ public class ProfileFragment extends Fragment {
                     imageViewGoogleIcon.setVisibility(View.VISIBLE);
             }
 
-            textViewChangeProfilePicture.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    addProfilePicture();
-                }
-            });
+
 
             listViewUserProducts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override

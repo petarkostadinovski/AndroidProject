@@ -34,7 +34,7 @@
         android:layout_width="221dp"
         android:layout_height="40dp"
         android:layout_marginStart="67dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="40dp"
         android:ems="10"
         android:hint="Search "
         android:inputType="textPersonName"
@@ -45,7 +45,7 @@
         android:id="@+id/imageViewSearchKeys"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="76dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -53,14 +53,14 @@
 
     <ListView
         android:id="@+id/listViewAccessories"
-        android:layout_width="410dp"
-        android:layout_height="420dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginBottom="113dp"
+        android:layout_width="409dp"
+        android:layout_height="519dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="128dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.571"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerAccessories" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerAccessories"
+        app:layout_constraintVertical_bias="0.263" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
